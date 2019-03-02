@@ -109,18 +109,21 @@ namespace ByteBuffer
 			fixed (byte* ptr = &m_buffer[idx])
 				*(long*)ptr = value;
 		}
-		public void WriteString(string value)
-		{			
+		public void WriteString(string value = "")
+		{	
+		        var wvalue = Encoding.Default.GetBytes(value);
+                        var length = wvalue.Length;	
+			WriteShort((short)(value == "" ? 0 : length));
+			
 			fixed (byte* bufPtr = m_buffer)
-			fixed (char* strPtr = value)
+			fixed (byte* strPtr = wvalue)
 			{
-				var length = value.Length;
 				
 				var buf = bufPtr + Advance(length);
 				var str = strPtr;
 
 				for (int i = 0; i < length; i++)
-					*buf++ = (byte)*str++;
+					*buf++ = *str++;
 			}
 		}
 
