@@ -84,9 +84,9 @@ namespace ByteBuffer
         {
             return *(long*)Advance(8);
         }
-        public string ReadString(int count)
+        public string ReadString(int count = -1)
         {
-            return new string((sbyte*)Advance(count), 0, count);
+            return Encoding.Default.GetString(ReadBytes(count == -1 ? ReadShort() : count));
         }
         
         public void Skip(int count)
